@@ -1,0 +1,30 @@
+yolov5_custom_train_V6.0_for_TX2_NX
+yolov5_custom_train_V6.0_for_TX2_NX
+
+yolov5/utils/loss.py dosyası içinde alttaki değişiklik yapılır.
+
+✅ Kalıcı Çözüm (Kod Değişikliği) loss.py dosyasındaki build_targets() fonksiyonuna git.
+
+Yaklaşık 217. satırda şu satırı bul:
+
+//////
+
+indices.append((b, a, gj.clamp_(0, gain[3] - 1), gi.clamp_(0, gain[2] - 1)))
+
+//////
+
+Bu satırı şununla değiştir:
+
+//////
+
+gj = gj.clamp(0, gain[3] - 1).long()
+
+gi = gi.clamp(0, gain[2] - 1).long()
+
+indices.append((b, a, gj, gi))
+
+//////
+
+clamp_() yerine clamp() kullandık (in-place değil, daha güvenli).
+
+.long() ile tensör tipini doğru hale getirdik.
